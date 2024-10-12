@@ -1,6 +1,6 @@
 [submodule "documentation"]
 	path = documentation
-	url = git@gitlab.ti.howest.be:ti/2024-2025/s5/project-iv/projecten/project-05/documentation.git
+	url = https://github.com/yourusername/FrameIt-documentation.git
 [submodule "sources"]
 	path = sources
 	url = https://github.com/tobiashungwe/FrameIt-sources.git
