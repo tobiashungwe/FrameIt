@@ -27,7 +27,7 @@ However, if you ever need to manually set up the hooks or something seems off, s
 
 ```bash
 ./setup-hooks.sh
-
+```
 
 ## Important Links:
 - [Wireframes](https://www.figma.com/design/3kQr29ugPOI1reTJjhjA3T/Untitled?node-id=0-1&node-type=canvas&t=MlslyXII6Brza4N9-0)
