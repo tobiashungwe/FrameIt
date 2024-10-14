@@ -1,5 +1,5 @@
 #!/bin/bash
-# setup-hooks.sh: Script to set up Git hooks for the repository
+# setup-hooks.sh: Script to set up Git hooks and remotes for the repository and submodules
 
 # Ensure we're in the root of the repository
 if [ ! -d ".git" ]; then
@@ -21,13 +21,49 @@ else
     echo "Pre-push hook already exists."
 fi
 
-# Copy other hooks if needed (e.g., post-checkout)
-if [ ! -f ".git/hooks/post-checkout" ]; then
-    cp .githooks/post-checkout .git/hooks/post-checkout
-    chmod +x .git/hooks/post-checkout
-    echo "Post-checkout hook installed."
-else
-    echo "Post-checkout hook already exists."
+# Rename 'origin' to 'github' if the origin remote exists for the main repository
+if git remote | grep -q "origin"; then
+    git remote rename origin github
+    echo "Renamed 'origin' remote to 'github'."
 fi
 
-echo "Git hooks setup complete."
+# Add GitHub remote if it doesn't exist
+if ! git remote | grep -q "github"; then
+    git remote add github https://github.com/tobiashungwe/FrameIt.git
+    echo "GitHub remote added."
+fi
+
+# Add GitLab remote if it doesn't exist
+if ! git remote | grep -q "gitlab"; then
+    git remote add gitlab https://gitlab.com/tobiashungwe/FrameIt.git
+    echo "GitLab remote added."
+fi
+
+# Verify remotes
+echo "Current remotes for main repository:"
+git remote -v
+
+# Set up remotes for each submodule
+echo "Setting up remotes for submodules..."
+git submodule foreach '
+    echo "Processing submodule: $name"
+    if git remote | grep -q "origin"; then
+        git remote rename origin github
+        echo "Renamed origin to github for $name."
+    fi
+
+    if ! git remote | grep -q "github"; then
+        git remote add github https://github.com/tobiashungwe/$name.git
+        echo "Added GitHub remote for submodule $name."
+    fi
+
+    if ! git remote | grep -q "gitlab"; then
+        git remote add gitlab https://gitlab.com/tobiashungwe/$name.git
+        echo "Added GitLab remote for submodule $name."
+    fi
+
+    echo "Remotes for submodule $name:"
+    git remote -v
+'
+
+echo "Git hooks and remotes setup complete for main repository and submodules."
